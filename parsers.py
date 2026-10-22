@@ -1,17 +1,9 @@
-# Parsers: um para cada entidade, como no diagrama (Opção 2).
-#
-# serializar(obj)          -> registro em String: "coluna=valor;coluna=valor;..."
-# desserializar(registro)  -> objeto da entidade, a partir dessa String
-#
-# Um valor vazio (ex.: "ranking=") significa NULL no banco.
-
 from entidades import Campeonato, Config, Jogador, Participantes, Partida, Serie, Time
 
 
 # ---------- funções de apoio usadas por todos os parsers ----------
 
 def montarRegistro(campos):
-    # {"id": 1, "nome": "FURIA"} -> "id=1;nome=FURIA"
     for coluna, valor in campos.items():
         if valor is not None and (";" in str(valor) or "=" in str(valor)):
             raise ValueError(f"O campo {coluna} não pode conter ';' nem '='.")
@@ -19,7 +11,6 @@ def montarRegistro(campos):
 
 
 def lerRegistro(registro):
-    # "id=1;nome=FURIA" -> {"id": "1", "nome": "FURIA"}
     campos = {}
     for parte in registro.split(";"):
         coluna, valor = parte.split("=", 1)

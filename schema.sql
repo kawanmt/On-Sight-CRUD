@@ -1,13 +1,6 @@
--- On Sight AI - script corrigido
--- Correções em relação ao script original do Workbench:
---   1. Nomes de FK únicos no schema (antes id_campeonato e id_vencedor se repetiam)
---   2. Chave primária composta em participantes (id_campeonato, id_time)
---   3. Removida a palavra VISIBLE dos índices (é o padrão do MySQL 8 e assim o script
---      também roda no MariaDB, que não aceita essa palavra)
-
 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
-SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION'; 
 
 CREATE SCHEMA IF NOT EXISTS `mydb` DEFAULT CHARACTER SET utf8mb3;
 USE `mydb`;

@@ -1,5 +1,3 @@
-# InteracaoUsuario: os menus no terminal. Só conversa com o Controlador.
-
 import mysql.connector
 
 from entidades import Campeonato, Config, Jogador, Partida, Serie, Time

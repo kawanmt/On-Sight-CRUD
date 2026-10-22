@@ -1,7 +1,3 @@
-# Controlador: recebe os pedidos da InteracaoUsuario e cumpre cada um usando
-# as entidades e o GerenciadorBD. Só lida com objetos: não conhece SQL nem parsers.
-
-
 class Controlador:
     def __init__(self, gerenciador):
         self.gerenciador = gerenciador
@@ -29,7 +25,6 @@ class Controlador:
         self.gerenciador.inserir(partida)
 
     def consultarRanking(self):
-        # Times em ordem de ranking; os sem ranking vão para o fim.
         times = self.gerenciador.selecionar("time")
         return sorted(times, key=lambda t: (t.ranking is None, t.ranking))
 
@@ -58,7 +53,6 @@ class Controlador:
     # ---------- apoio ----------
 
     def _buscar(self, tabela, filtro, erro):
-        # Devolve o único objeto que bate com o filtro, ou avisa que não existe.
         encontrados = self.gerenciador.selecionar(tabela, filtro)
         if not encontrados:
             raise ValueError(erro)

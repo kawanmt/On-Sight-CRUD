@@ -1,7 +1,3 @@
-# GerenciadorBD: toda a persistência fica aqui. Recebe e devolve objetos,
-# usa o parser de cada classe para virar registro (String) e monta o SQL.
-# É a única classe que conhece os parsers e o SQL.
-
 import mysql.connector
 from mysql.connector.constants import ClientFlag
 
@@ -9,7 +5,6 @@ from entidades import Campeonato, Config, Jogador, Participantes, Partida, Serie
 from parsers import (ParserCampeonato, ParserConfig, ParserJogador, ParserParticipantes,
                      ParserPartida, ParserSerie, ParserTime, lerRegistro, montarRegistro)
 
-# Colunas da chave primária de cada tabela (as que não estão aqui usam "id").
 CHAVES = {
     "config": ["id_jogador"],
     "participantes": ["id_campeonato", "id_time"],
@@ -18,11 +13,10 @@ CHAVES = {
 
 class GerenciadorBD:
     def __init__(self, url, usuario, senha):
-        self.url = url            # formato "host:porta/banco", ex.: "localhost:3306/mydb"
+        self.url = url
         self.usuario = usuario
         self.senha = senha
         self.conexao = None
-        # Para cada classe: a tabela dela e o parser que a converte em registro.
         self.parsers = {
             Campeonato: ("campeonato", ParserCampeonato()),
             Participantes: ("participantes", ParserParticipantes()),
@@ -65,14 +59,12 @@ class GerenciadorBD:
             raise ValueError("Registro não encontrado para atualizar.")
 
     def remover(self, tabela, chave):
-        # chave no formato do registro: "id=3" ou "id_campeonato=1;id_time=2"
         campos = self._valores(chave)
         sql = f"DELETE FROM {tabela} WHERE " + " AND ".join(f"{c} = %s" for c in campos)
         if self._executar(sql, list(campos.values())) == 0:
             raise ValueError("Registro não encontrado para remover.")
 
     def selecionar(self, tabela, filtro=""):
-        # filtro vazio = todas as linhas; senão, no formato "coluna=valor"
         parser = next(p for t, p in self.parsers.values() if t == tabela)
         sql = f"SELECT * FROM {tabela}"
         valores = []
@@ -85,17 +77,14 @@ class GerenciadorBD:
         colunas = [d[0] for d in cursor.description]
         linhas = cursor.fetchall()
         cursor.close()
-        # Cada linha vira registro (String) e o parser monta o objeto.
         return [parser.desserializar(montarRegistro(dict(zip(colunas, linha)))) for linha in linhas]
 
     # ---------- apoio ----------
 
     def _valores(self, registro):
-        # Converte a String em {coluna: valor}; texto vazio vira NULL.
         return {c: (None if v == "" else v) for c, v in lerRegistro(registro).items()}
 
     def _executar(self, sql, valores):
-        # Roda um comando que altera dados: confirma (commit) ou desfaz tudo (rollback).
         cursor = self.conexao.cursor()
         try:
             cursor.execute(sql, valores)

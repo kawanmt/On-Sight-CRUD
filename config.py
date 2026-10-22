@@ -1,10 +1,3 @@
-"""Configuração da conexão com o MySQL.
-
-Os valores podem ser trocados aqui ou por variáveis de ambiente
-(DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, DB_NAME), assim cada pessoa
-do grupo usa a própria senha sem precisar editar o código.
-"""
-
 import os
 
 DB_CONFIG = {

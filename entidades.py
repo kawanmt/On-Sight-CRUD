@@ -1,6 +1,3 @@
-# Entidades: uma classe por tabela, com os atributos e métodos do diagrama de classes.
-
-
 class Campeonato:
     def __init__(self, id, nome, localizacao, premiacaoTotal, fase):
         self.id = id
@@ -10,14 +7,12 @@ class Campeonato:
         self.fase = fase
 
     def inscreverTime(self, idTime):
-        # Cria a inscrição do time neste campeonato (classificação e prêmio ainda zerados).
         return Participantes(self.id, idTime, 0, 0)
 
     def avancarFase(self, novaFase):
         self.fase = novaFase
 
     def premiacaoDistribuida(self, lista):
-        # Soma o que já foi pago aos times inscritos neste campeonato.
         return sum(p.premiacao for p in lista if p.idCampeonato == self.id)
 
 
